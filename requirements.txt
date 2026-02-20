@@ -1,0 +1,4 @@
+telethon
+pyTelegramBotAPI
+asyncio
+requests
