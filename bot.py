@@ -6,26 +6,19 @@ from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from telebot import TeleBot, types
 
-# ===== الإعدادات (مضافة كما طلبت) =====
+# ===== الإعدادات =====
 API_ID = int(os.getenv("API_ID", 39458857))
 API_HASH = os.getenv("API_HASH", "3b62c284e0f6b6b0b16ba6d7b46a4a6f")
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8540030986:AAGkaPnTE52X0BAkOKfZ3ymsqLurod9UDic")
-PHONE_NUMBER = os.getenv("PHONE_NUMBER", "967735264023")  # موجود لكن غير مستخدم
 SESSION_STRING = os.getenv("SESSION_STRING", "SESSION_STRING_HERE")
-
 CHANNEL = os.getenv("CHANNEL", "GSN_MOD")
 ADMIN_ID = int(os.getenv("ADMIN_ID", 1972494449))
 
 # ===== إنشاء العملاء =====
-user_client = TelegramClient(
-    StringSession(SESSION_STRING),
-    API_ID,
-    API_HASH
-)
-
+user_client = TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH)
 bot = TeleBot(BOT_TOKEN)
 
-# ===== بيانات =====
+# ===== بيانات النسخ =====
 versions = []
 users = {}
 
@@ -42,7 +35,6 @@ async def update_versions():
                 continue
 
             text = msg.text
-
             ram = None
             m = re.search(r'(\d+)\s*رام|رام[:\s]*(\d+)', text)
             if m:
@@ -60,9 +52,7 @@ async def update_versions():
                     "ram": ram,
                     "link": f"https://t.me/{CHANNEL}/{msg.id}"
                 })
-
         print(f"✅ تم تحميل {len(versions)} نسخة")
-
     except Exception as e:
         print("❌ خطأ:", e)
 
@@ -73,7 +63,7 @@ def start(message):
     kb = types.InlineKeyboardMarkup()
     kb.add(
         types.InlineKeyboardButton("🎮 PUBG MOBILE", callback_data="mobile"),
-        types.InlineKeyboardButton("🎯 PUBG LITE", callback_data="lite"),
+        types.InlineKeyboardButton("🎯 PUBG LITE", callback_data="lite")
     )
     kb.add(types.InlineKeyboardButton("📢 القناة", url=f"https://t.me/{CHANNEL}"))
 
@@ -100,7 +90,6 @@ def callback(call):
 def ram_handler(message):
     ram = int(message.text)
     game = users.get(message.chat.id, {}).get("game")
-
     if not game:
         bot.send_message(message.chat.id, "❌ اختر اللعبة أولاً عبر /start")
         return
@@ -111,7 +100,6 @@ def ram_handler(message):
         return
 
     best = min(matches, key=lambda x: abs(x["ram"] - ram))
-
     bot.send_message(
         message.chat.id,
         f"""🎯 النسخة المناسبة لك:
